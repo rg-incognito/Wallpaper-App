@@ -1,4 +1,4 @@
-package com.animation.walpaper4k;
+package com.animation.walpaper4k.adpters;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -9,38 +9,41 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.animation.walpaper4k.R;
+import com.animation.walpaper4k.ExpandCategory;
+import com.animation.walpaper4k.FullWallpaper;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.Myclass> {
 
-    SecondPage secondPage;
+    ExpandCategory expandCategory;
     ArrayList<String> imgArrayList;
-    public RecyclerViewAdapter(SecondPage secondPage, ArrayList<String> imgArrayList) {
+    public RecyclerViewAdapter(ExpandCategory expandCategory, ArrayList<String> imgArrayList) {
 
         this.imgArrayList=imgArrayList;
-        this.secondPage=secondPage;
+        this.expandCategory = expandCategory;
     }
 
     @NonNull
     @Override
     public Myclass onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(secondPage).inflate(R.layout.recycler_image_item,parent,false);
+        View view= LayoutInflater.from(expandCategory).inflate(R.layout.recycler_image_item,parent,false);
 
         return new Myclass(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull Myclass holder, final int position) {
-        Glide.with(secondPage).load(imgArrayList.get(position)).into(holder.imageView);
+        Glide.with(expandCategory).load(imgArrayList.get(position)).into(holder.imageView);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(secondPage,WalpaperPagerActivity.class);
+                Intent i=new Intent(expandCategory, FullWallpaper.class);
                 i.putExtra("list",imgArrayList);
                 i.putExtra("pos",position);
-                secondPage.startActivity(i);
+                expandCategory.startActivity(i);
             }
         });
 

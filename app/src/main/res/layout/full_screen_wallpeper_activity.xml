@@ -4,12 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SecondPage">
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcMain"
+    tools:context=".FullWallpaper">
+    <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:id="@+id/viewPager"/>
 
 </RelativeLayout>

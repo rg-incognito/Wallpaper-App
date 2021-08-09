@@ -1,4 +1,4 @@
-package com.animation.walpaper4k;
+package com.animation.walpaper4k.adpters;
 
 import android.app.WallpaperManager;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.animation.walpaper4k.R;
+import com.animation.walpaper4k.FullWallpaper;
 import com.bumptech.glide.Glide;
 import com.chootdev.blurimg.BlurImage;
 
@@ -26,17 +28,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.channels.AsynchronousChannelGroup;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
-    WalpaperPagerActivity walpaperPagerActivity;
+    FullWallpaper fullWallpaper;
     ArrayList<String> allImageList;
 
-    public PagerAdapter(WalpaperPagerActivity walpaperPagerActivity, ArrayList<String> allImageList) {
+    public PagerAdapter(FullWallpaper fullWallpaper, ArrayList<String> allImageList) {
         this.allImageList = allImageList;
-        this.walpaperPagerActivity = walpaperPagerActivity;
+        this.fullWallpaper = fullWallpaper;
 
     }
 
@@ -53,7 +54,7 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-        View view = LayoutInflater.from(walpaperPagerActivity).inflate(R.layout.pager_adapter_item, container, false);
+        View view = LayoutInflater.from(fullWallpaper).inflate(R.layout.pager_adapter_item, container, false);
         ImageView imageView;
         ImageView simpleImg;
         ImageView share;
@@ -61,12 +62,12 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
         ImageView download;
         simpleImg = view.findViewById(R.id.simpleImg);
         imageView = view.findViewById(R.id.blurimage);
-        share=view.findViewById(R.id.share);
-        download=view.findViewById(R.id.download);
-        setwalpaper=view.findViewById(R.id.set_walpaper);
+        share = view.findViewById(R.id.share);
+        download = view.findViewById(R.id.download);
+        setwalpaper = view.findViewById(R.id.set_walpaper);
 
-        Glide.with(walpaperPagerActivity).load(allImageList.get(position)).into(simpleImg);
-        BlurImage.withContext(walpaperPagerActivity)
+        Glide.with(fullWallpaper).load(allImageList.get(position)).into(simpleImg);
+        BlurImage.withContext(fullWallpaper)
                 .blurFromUri(allImageList.get(position))
                 .into(imageView);
 
@@ -80,7 +81,7 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            new DownloadImage().execute(allImageList.get(position));
+                new DownloadImage().execute(allImageList.get(position));
             }
         });
         setwalpaper.setOnClickListener(new View.OnClickListener() {
@@ -99,11 +100,15 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
-    class DownloadImage extends AsyncTask<String , Void, Bitmap> {
+
+
+    class DownloadImage extends AsyncTask<String, Void, Bitmap> {
+
+
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            Toast.makeText(walpaperPagerActivity,"Done Download",Toast.LENGTH_SHORT);
+            Toast.makeText(fullWallpaper, "Done Download", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -116,8 +121,6 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
                 HttpURLConnection connection = null;
 
                 connection = (HttpURLConnection) url.openConnection();
-
-
                 connection.connect();
 
                 InputStream inputStream = null;
@@ -138,8 +141,8 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Toast.makeText(walpaperPagerActivity, "Download Succesful", Toast.LENGTH_SHORT);
-            }catch (Exception e){
+                Toast.makeText(fullWallpaper, "Download Succesful", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -147,11 +150,12 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
             return null;
         }
     }
-    class ShareImg extends AsyncTask<String , Void, Bitmap> {
+
+    class ShareImg extends AsyncTask<String, Void, Bitmap> {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            Toast.makeText(walpaperPagerActivity,"Share Succesful",Toast.LENGTH_SHORT);
+            Toast.makeText(fullWallpaper, "Share Succesful", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -174,23 +178,21 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
 
                 Bitmap myBitmap = BitmapFactory.decodeStream(inputStream);
                 Bitmap b = myBitmap;
-                Intent share=new Intent(Intent.ACTION_SEND);
+                Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("Image/jpeg");
                 share.setType("text/html");
-                share.putExtra(Intent.EXTRA_TEXT,"shre body");
+                share.putExtra(Intent.EXTRA_TEXT, "shre body");
 
 
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 b.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                String path = MediaStore.Images.Media.insertImage(walpaperPagerActivity.getContentResolver(),b,"Title",null);
+                String path = MediaStore.Images.Media.insertImage(fullWallpaper.getContentResolver(), b, "Title", null);
                 Uri imageUri = Uri.parse(path);
-                share.putExtra(Intent.EXTRA_STREAM,imageUri);
-                walpaperPagerActivity.startActivity(Intent.createChooser(share,"Select"));
+                share.putExtra(Intent.EXTRA_STREAM, imageUri);
+                fullWallpaper.startActivity(Intent.createChooser(share, "Select"));
 
 
-
-
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -198,20 +200,22 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
             return null;
         }
     }
-    class SetWalpaper extends AsyncTask<String , Void, Bitmap> {
+
+    class SetWalpaper extends AsyncTask<String, Void, Bitmap> {
         Random random;
         int var;
+
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            Toast.makeText(walpaperPagerActivity,"Walpaper set Succesful",Toast.LENGTH_SHORT);
+            Toast.makeText(fullWallpaper, "Walpaper set Succesful", Toast.LENGTH_SHORT).show();
 
         }
 
         @Override
         protected Bitmap doInBackground(String... urls) {
-            random= new Random();
-            var=random.nextInt(10000);
+            random = new Random();
+            var = random.nextInt(10000);
 
             try {
 
@@ -229,17 +233,16 @@ public class PagerAdapter extends androidx.viewpager.widget.PagerAdapter {
                 inputStream = connection.getInputStream();
 
                 Bitmap myBitmap = BitmapFactory.decodeStream(inputStream);
-                WallpaperManager myWallpaper= WallpaperManager.getInstance(walpaperPagerActivity.getApplicationContext());
+                WallpaperManager myWallpaper = WallpaperManager.getInstance(fullWallpaper.getApplicationContext());
                 try {
                     myWallpaper.setBitmap(myBitmap);
 
-                }catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
 
 
-
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

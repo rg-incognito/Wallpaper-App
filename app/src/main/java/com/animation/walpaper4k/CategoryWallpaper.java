@@ -26,7 +26,7 @@ public class CategoryWallpaper extends AppCompatActivity {
         imagelist.add("https://tvline.com/wp-content/uploads/2019/08/daytime-emmys-younger-category-merge.jpg");
         imagelist.add("https://wallpapercave.com/wp/wp4330394.jpg");
         imagelist.add("https://cdn.wallpapersafari.com/73/10/rTmSMB.jpg");
-        imagelist.add("https://images.pexels.com/photos/1375849/pexels-photo-1375849.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500");
+        imagelist.add("https://lh3.googleusercontent.com/proxy/_k0ECB6McSLS06l7NNJwdsfmkoTopp9F8mmS1oHFrXFKr6vsZQCPUE2ONY30U-2Z4-_RSl5nmndcBR711q7FikF2YQSGPwv5kuUL7qqgGztGE7MZiupztkBvzU6HK2oJ2-tDXw0NqH-m");
 
 
         titlelist.add("actor");
